@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <script type="text/javascript" src="../js/_.js"></script>;
+</head>
+<body>
+
+<script>
+
+console.log(
+    [1, 2, 3, 4].map( function(val) {
+        return val * 2;
+    })
+);
+
+console.log(
+    [1, 2, 3, 4].filter( function(val) {
+        return val % 2;
+    })
+);
+
+
+/******************************************************************************
+ * document.querySelectorAll('*') 의 결과는
+ * array 가 아니라 array-like 객체이므로
+ * map() 메소드를 호출할 수 없다. map() 메소드는 array에서만 사용 가능.
+******************************************************************************/
+/*
+console.log(
+    document.querySelectorAll('*').map( function(node) {
+        return node.nodeName;
+    })
+);
+*/
+
+/******************************************************************************
+ * document.querySelectorAll('*') 의 결과는
+ * array 가 아니라 array-like 객체이므로
+ * map() 메소드를 호출할 수 없다. map() 메소드는 array에서만 사용 가능.
+ ******************************************************************************/
+console.log(
+    _map( document.querySelectorAll('*'), function(node) {
+        return node.nodeName;
+    })
+);
+
+</script>
+</body>
+</html>
