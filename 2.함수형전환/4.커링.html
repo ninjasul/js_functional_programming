@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+    <script type="text/javascript" src="../js/_.js"></script>;
+</head>
+<body>
+
+<script>
+
+    var users = [
+        { id: 1, name: 'ID', age: 36 },
+        { id: 2, name: 'BJ', age: 32 },
+        { id: 3, name: 'JM', age: 32 },
+        { id: 4, name: 'PJ', age: 27 },
+        { id: 5, name: 'HA', age: 25 },
+        { id: 6, name: 'JE', age: 26 },
+        { id: 7, name: 'JI', age: 31 },
+        { id: 8, name: 'MP', age: 23 },
+    ];
+
+    // 1.  _curry: 원하는 인자 개수까지 채워질때 까지 기다렸다가 인자 개수가 채워지면 실행되는 함수
+
+    // 인자로 함수 본체를 전달 받음.
+    function _curry( fn ) {
+        return function( a, b ) {
+            return ( arguments.length == 2 ) ? fn( a, b ) : function( b ) { return fn( a, b ); };
+        };
+    }
+
+    // 인자의 적용 순서를 오른쪽 부터 실행하는 _curryr 함수
+    function _curryr( fn ) {
+        return function( a, b ) {
+            return ( arguments.length == 2 ) ? fn( a, b ) : function( b ) { return fn( b, a ); };
+        };
+    }
+
+    /****************************************************************************************
+     * 기존에 존재하는 아래의 add 함수에 _curry()으로 감싸주기만 하면 커링이 적용됨.
+
+        var add = function( a, b ) {
+            return a + b;
+        };
+    ****************************************************************************************/
+
+    var add = _curry(function( a, b ) {
+        return a + b;
+    });
+
+    var add10 = add(10);
+    var add5 = add(5);
+
+    console.log( add10(5) );
+    console.log( add(5)(3) );
+    console.log( add5(3) );
+    console.log( add(10)(3) );
+    console.log( add( 1, 2 ) );
+
+    var sub = _curryr(function( a, b ) {
+        return a - b;
+    });
+
+    console.log( sub( 10, 5 ) );
+
+    var sub10 = sub(10);
+    console.log( sub10(5) );
+
+
+    // 2. _get() - 객체를 안전하게 얻어오는 함수
+    var _get = function(obj, key) {
+        return !!obj ? obj[key] : undefined;
+    };
+
+    var user1 = users[0];
+
+    console.log( user1.name );
+    console.log( _get(user1, 'name'));
+
+    // 아래 코드는 오류가 발생하지만 _get() 을 이용하면 안전하게 사용할 수 있음.(undefined 획득)
+    //console.log( users[10].name );
+    console.log( _get(users[10], 'name'));
+
+
+    // _curryr() 함수를 이용해 얻어올 필드를 먼저 결정할 수도 있음.
+    var _getr = _curryr(_get);
+    var _getName = _getr('name');
+
+    console.log( _getName(users[1]));
+    console.log( _getName(users[2]));
+    console.log( _getName(users[3]));
+    console.log( _getName(users[10]));
+
+
+    console.log( _map(
+        _filter( users, function( user ) {
+            return  user.age >= 30;
+        }),
+        _getr('name'))
+    );
+
+    console.log( _map(
+        _filter( users, function( user ) {
+            return  user.age < 30;
+        }),
+        _getr('age'))
+    );
+
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+    <script type="text/javascript" src="../js/_.js"></script>;
+</head>
+<body>
+
+<script>
+
+    var users = [
+        { id: 1, name: 'ID', age: 36 },
+        { id: 2, name: 'BJ', age: 32 },
+        { id: 3, name: 'JM', age: 32 },
+        { id: 4, name: 'PJ', age: 27 },
+        { id: 5, name: 'HA', age: 25 },
+        { id: 6, name: 'JE', age: 26 },
+        { id: 7, name: 'JI', age: 31 },
+        { id: 8, name: 'MP', age: 23 },
+    ];
+
+    // 1.  _curry: 원하는 인자 개수까지 채워질때 까지 기다렸다가 인자 개수가 채워지면 실행되는 함수
+
+    // 인자로 함수 본체를 전달 받음.
+    function _curry( fn ) {
+        return function( a, b ) {
+            return ( arguments.length == 2 ) ? fn( a, b ) : function( b ) { return fn( a, b ); };
+        };
+    }
+
+    // 인자의 적용 순서를 오른쪽 부터 실행하는 _curryr 함수
+    function _curryr( fn ) {
+        return function( a, b ) {
+            return ( arguments.length == 2 ) ? fn( a, b ) : function( b ) { return fn( b, a ); };
+        };
+    }
+
+    /****************************************************************************************
+     * 기존에 존재하는 아래의 add 함수에 _curry()으로 감싸주기만 하면 커링이 적용됨.
+
+        var add = function( a, b ) {
+            return a + b;
+        };
+    ****************************************************************************************/
+
+    var add = _curry(function( a, b ) {
+        return a + b;
+    });
+
+    function _rest(list, num) {
+        return Array.prototype.slice.call(list, num || 1);
+    }
+
+    /*******************************************************************************************
+     * list: 처리할 값들이 담긴 리스트
+     * iter: 처리 함수
+     * memo: 초기값
+     *******************************************************************************************/
+    function _reduce( list, iter, memo ) {
+
+        if( arguments.length == 2 ) {
+            memo = list[0];
+            list = _rest(list);
+        }
+
+        _each( list, function(val) {
+            memo = iter( memo, val );
+        });
+
+        return memo;
+    }
+
+    console.log(
+        _reduce([1, 2, 3], add, 0 )
+    );
+
+    console.log(
+        _reduce([1, 2, 3], add )
+    );
+
+
+</script>
+</body>
+</html>
