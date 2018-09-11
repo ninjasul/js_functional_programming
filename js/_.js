@@ -23,7 +23,7 @@ function _each( list, iter ) {
     var keys = _keys(list);
 
     for( var i = 0, len = keys.length; i < len; ++i ) {
-        iter(list[keys[i]]);
+        iter(list[keys[i]], keys[i]);
     }
 
     return list;
@@ -115,3 +115,106 @@ var _values = _map(_identity);
 function _pluck( data, key ) {
     return _map( data, _get(key) );
 }
+
+function _negate( func ) {
+    return function( val ) {
+        return !func(val);
+    }
+}
+
+function _reject( data, predi ) {
+    return _filter( data, _negate(predi))
+}
+
+var _compact = _filter(_identity);
+var _reject = _curryr(_reject);
+
+function _find( list, predi ) {
+    var keys = _keys(list);
+
+    for( var i = 0, len = keys.length; i < len; ++i ) {
+        var val = list[keys[i]];
+        if( predi(val)) return val;
+    }
+}
+
+function _find_index( list, predi ) {
+    var keys = _keys(list);
+
+    for( var i = 0, len = keys.length; i < len; ++i ) {
+        if( predi(list[keys[i]])) return i;
+    }
+
+    return -1;
+}
+
+var _find = _curryr(_find);
+var _find_index = _curryr(_find_index);
+
+// 조건을 만족하는 값이 하나라도 존재하면 true, 없으면 false.
+function _some( data, predi ) {
+    return _find_index( data, predi || _identity ) > -1;
+}
+
+// 모든 데이터가 조건을 만족하면 true, 아니면 false
+function _every( data, predi ) {
+    return _find_index( data, _negate(predi || _identity) ) == -1;
+}
+
+//var _some = _curryr( _some );
+//var _every = _curryr( _every );
+
+function _min( data ) {
+    return _reduce( data, function( a, b ) {
+        return a > b ? b : a;
+    });
+}
+
+function _max( data ) {
+    return _reduce( data, function( a, b ) {
+        return a > b ? a : b;
+    });
+}
+
+function _min_by( data, iter ) {
+    return _reduce( data, function( a, b ) {
+        return iter(a) < iter(b) ? a : b;
+    });
+}
+
+function _max_by( data, iter ) {
+    return _reduce( data, function( a, b ) {
+        return iter(a) > iter(b) ? a : b;
+    });
+}
+
+var _min_by = _curryr( _min_by );
+var _max_by = _curryr( _max_by );
+
+function _push( obj, key, val ) {
+    (obj[key] = obj[key] || []).push( val );
+    return obj;
+}
+
+function _group_by( data, iter ) {
+    return _reduce( data, function( grouped, val) {
+        return _push(grouped, iter(val), val);
+    }, {});
+}
+
+var _group_by = _curryr( _group_by );
+
+function _inc( count, key) {
+    count[key] ? count[key]++ : count[key] = 1;
+    return count;
+}
+
+function _count_by( data, iter ) {
+    return _reduce( data, function( count, val) {
+        return _inc( count, iter(val) );
+    }, {});
+}
+
+var _count_by = _curryr(_count_by);
+
+var _pairs = _map( (val, key) => [key, val] );

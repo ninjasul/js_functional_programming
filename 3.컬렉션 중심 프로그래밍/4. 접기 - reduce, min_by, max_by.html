@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../js/_.js"></script>
+</head>
+<body>
+
+<script>
+    var users = [
+        { id: 10, name: 'ID', age: 36 },
+        { id: 20, name: 'BJ', age: 32 },
+        { id: 30, name: 'JM', age: 32 },
+        { id: 40, name: 'PJ', age: 27 },
+        { id: 50, name: 'HA', age: 25 },
+        { id: 60, name: 'JE', age: 26 },
+        { id: 70, name: 'JI', age: 31 },
+        { id: 80, name: 'MP', age: 23 },
+        { id: 90, name: 'FP', age: 13 }
+    ];
+
+    // reduce
+
+    // min, max, min_by, max_by
+
+    // _min, _max - iter 함수 없이 배열 내에서 최소값, 최대값 획득
+    console.log(
+        _min( [1, 2, 4, 10, 5, -4])
+    );
+
+    console.log(
+        _max( [1, 2, 4, 10, 5, -4])
+    );
+
+    console.log("=====================");
+
+    // _min_by, _max_by - 각 항목들에 대해 iter 함수를 실행한 결과의 최소값, 최대값 획득
+    console.log(
+        _min_by( [1, 2, 4, 10, 5, -4], Math.abs)
+    );
+
+    console.log(
+        _max_by( [1, 2, 4, 10, 5, -4, -11], Math.abs)
+    );
+
+    console.log(
+        _max_by( [1, 2, 4, 10, 5, -4, -11], Math.abs)
+    );
+
+    console.log(
+        _max_by( [1, 2, 4, 10, 5, -4, -11], Math.abs)
+    );
+
+    console.log(
+        _max_by( users, function(user) {
+            return user.age
+        })
+    );
+
+    console.log(
+        _min_by( users, function(user) {
+            return user.age
+        })
+    );
+
+    console.log("=====================");
+
+    _go(
+        users,
+        _filter( user => user.age >= 30 ),
+        _min_by( _get('age') ),
+        console.log
+    );
+
+    _go(
+        users,
+        _filter( user => user.age < 30 ),
+        _max_by( _get('age') ),
+        console.log
+    );
+
+    _go(
+        users,
+        _reject( user => user.age > 30 ),
+        _max_by( _get('id') ),
+        console.log
+    );
+
+</script>
+</body>
+</html>
