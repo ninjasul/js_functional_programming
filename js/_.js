@@ -29,25 +29,25 @@ function _each( list, iter ) {
     return list;
 }
 
-function _map( list, predicate ) {
+function _filter( list, predicate ) {
 
     var new_list = [];
 
-    _each(list, function( item ) {
-        if( predicate(item) ) {
-            new_list.push(item);
+    _each(list, function( val ) {
+        if( predicate(val) ) {
+            new_list.push(val);
         }
     });
 
     return new_list;
 }
 
-function _filter( list, mapper ) {
+function _map( list, mapper ) {
 
     var new_list = [];
 
-    _each( list, function(item) {
-        new_list.push(mapper(item));
+    _each( list, function(val, key) {
+        new_list.push(mapper(val, key));
     });
 
     return new_list;
@@ -100,4 +100,18 @@ function _is_object( obj ) {
 
 function _keys( obj ) {
     return _is_object(obj) ? Object.keys(obj) : [];
+}
+
+function _values( data ) {
+    return _map( data, _identity );
+}
+
+function _identity( val ) {
+    return val;
+}
+
+var _values = _map(_identity);
+
+function _pluck( data, key ) {
+    return _map( data, _get(key) );
 }
