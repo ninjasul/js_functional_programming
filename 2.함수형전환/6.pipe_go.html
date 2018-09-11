@@ -1,5 +1,6 @@
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <script type="text/javascript" src="../js/_.js"></script>;
 </head>
 <body>
@@ -16,68 +17,11 @@
         { id: 8, name: 'MP', age: 23 },
     ];
 
-    var _get = function(obj, key) {
-        return !!obj ? obj[key] : undefined;
-    };
-
-    // 인자로 함수 본체를 전달 받음.
-    function _curry( fn ) {
-        return function( a, b ) {
-            return ( arguments.length == 2 ) ? fn( a, b ) : function( b ) { return fn( a, b ); };
-        };
-    }
-
-    // 인자의 적용 순서를 오른쪽 부터 실행하는 _curryr 함수
-    function _curryr( fn ) {
-        return function( a, b ) {
-            return ( arguments.length == 2 ) ? fn( a, b ) : function( b ) { return fn( b, a ); };
-        };
-    }
-
-    var _getr = _curryr(_get);
-
-    function _rest(list, num) {
-        return Array.prototype.slice.call(list, num || 1);
-    }
-
     /*******************************************************************************************
      * list: 처리할 값들이 담긴 리스트
      * iter: 처리 함수
      * memo: 초기값
      *******************************************************************************************/
-    function _reduce( list, iter, memo ) {
-
-        if( arguments.length == 2 ) {
-            memo = list[0];
-            list = _rest(list);
-        }
-
-        _each( list, function(val) {
-            memo = iter( memo, val );
-        });
-
-        return memo;
-    }
-
-    function _pipe() {
-        var fns = arguments;
-
-        return function(arg) {
-            return _reduce( fns, function(arg, fn) {
-                return fn(arg);
-            }, arg );
-        }
-    }
-
-    // _pipe의 즉시 실행 버전
-    function _go(arg) {
-        // 첫번째 인자는 arg로 넘겨받고
-        // 나머지 인자는 fns에 담는다.
-        var fns = _rest(arguments);
-
-        _pipe.apply( null, fns)(arg);
-    }
-
     var f1 = _pipe(
         function(a) { return a + 1; },
         function(a) { return a * 2; },
