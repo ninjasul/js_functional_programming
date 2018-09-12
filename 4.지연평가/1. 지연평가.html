@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../js/partial.js"></script>
+</head>
+<body>
+
+<script>
+    var users = [
+        { id: 10, name: 'ID', age: 36 },
+        { id: 20, name: 'BJ', age: 32 },
+        { id: 30, name: 'JM', age: 32 },
+        { id: 40, name: 'PJ', age: 27 },
+        { id: 50, name: 'HA', age: 25 },
+        { id: 60, name: 'JE', age: 26 },
+        { id: 70, name: 'JI', age: 31 },
+        { id: 80, name: 'MP', age: 23 },
+        { id: 90, name: 'FP', age: 13 }
+    ];
+
+// 1. 지연 평가를 시작 시키고 유지 시키는(이어 가는) 함수
+    // 1. map
+    // 2. filter, reject
+
+
+// 2. 끝을 내는 함수
+    // 1. take
+    // 2. some, every, find
+
+    var mi = 0;
+    var fi = 0;
+
+    _.go(
+        _.range(100),
+        _.map( function( val ) {
+            mi++;
+            return val * val;
+        }),
+        _.filter(function( val ) {
+            fi++;
+            return val % 2;
+        }),
+        _.some( function( val ) {
+            return val > 100;
+        }),
+        //_.take(5),
+        console.log
+    );
+
+    console.log(mi, fi);
+    console.log("---------------------------");
+
+    // 지연 평가를 하는 코드로 변경
+
+    mi = 0;
+    fi = 0;
+
+    _.go(
+        _.range(100),
+        L.map( function( val ) {
+            mi++;
+            return val * val;
+        }),
+        L.filter(function( val ) {
+            fi++;
+            return val % 2;
+        }),
+        L.some( function( val ) {
+            return val > 100;
+        }),
+        //L.take(5),
+        console.log
+    );
+
+    console.log(mi, fi);
+
+</script>
+</body>
+</html>
